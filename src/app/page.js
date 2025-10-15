@@ -1,72 +1,92 @@
 'use client'
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { Box, Button, FormControl, IconButton, Input, InputAdornment, InputLabel } from "@mui/material";
-import Image from "next/image";
-import Link from "next/link";
-import { Suspense, useState } from "react";
-
-const error = false
-
+import { Box } from "@mui/material";
+import { useRouter } from "next/navigation";
+import Login from "@/components/AuthForm";
 
 export default function Home() {
-    const [showPassword, setShowPassword] = useState(false)
+    // const [errors, setErrors] = useState({})
+    // const [alert, setAlert] = useState(null)
+    // const router = useRouter()
 
-    const handleClickShowPassword = () => setShowPassword(prev => !prev)
 
-    const handleMouseDownPassword = (event) => {
-        event.preventDefault();
-    };
+    // const handleSubmit = async (event) => {
+    //     
+        
+    //     const response = await signIn('credentials', data)
+    //     console.log('>>> check response:', response)
+    //     // setLoading(true)
+    //     // setErrors({})
+    //     // setAlert(null)
+    //     // try {
+    //     //     const formData = new FormData(event.currentTarget);
+    //     //     const data = {
+    //     //         username: formData.get('username'),
+    //     //         password: formData.get('password')
+    //     //     };
+    //     //     const response = await fetch('/api/auth/login', {
+    //     //         method: 'POST',
+    //     //         headers: {
+    //     //             'Content-Type': 'application/json',
+    //     //         },
+    //     //         body: JSON.stringify(data),
+    //     //     })
 
-    const handleMouseUpPassword = (event) => {
-        event.preventDefault();
-    };
+    //     //     // // Kiểm tra response status trước khi parse JSON
+    //     //     // if (!response.ok) {
+    //     //     //     throw new Error(`HTTP error! status: ${response.status}`);
+    //     //     // }
+
+    //     //     const result = await response.json()
+    //     //     console.log('result', result)
+
+    //     //     if (result.success) {
+    //     //         setAlert({ type: 'success', message: result.message })
+
+    //     //         // Lưu token nếu có
+    //     //         if (result.token) {
+    //     //             localStorage.setItem('token', result.token);
+    //     //         }
+
+    //     //         // Redirect sau 1 giây
+    //     //         // setTimeout(() => {
+    //     //         // }, 1000)
+    //     //         router.push('/dashboard')
+    //     //         // redirect('/dashboard')
+    //     //     } else {
+    //     //         setAlert({ type: 'error', message: result.message || 'Đăng nhập thất bại' })
+    //     //         // Xử lý lỗi xác thực từ formValidator
+    //     //         if (result.errors && Array.isArray(result.errors)) {
+    //     //             const newErrors = {};
+    //     //             result.errors.forEach(error => {
+    //     //                 // Map lỗi từ server về các trường tương ứng
+    //     //                 if (error.path === 'username') {
+    //     //                     newErrors.username = error.msg;
+    //     //                 } else if (error.path === 'password') {
+    //     //                     newErrors.password = error.msg;
+    //     //                 }
+    //     //                 // Có thể thêm các trường khác nếu cần
+    //     //             });
+    //     //             setErrors(newErrors);
+    //     //         } else if (result.message.includes('credentials')) {
+    //     //             setErrors({
+    //     //                 username: 'Tài khoản không tồn tại',
+    //     //                 password: 'Mật khẩu không đúng'
+    //     //             })
+    //     //         }
+    //     //     }
+    //     // } catch (error) {
+    //     //     console.error('Login error:', error)
+    //     //     setAlert({ type: 'error', message: 'Lỗi kết nối server' })
+    //     // } finally {
+    //     //     setLoading(false)
+    //     // }
+    // }
+
     return (
         <>
-            <Box component='div' className="w-full h-screen bg-gray-950 flex justify-center items-center p-6">
-                <Suspense>
-                    <form action>
-                        <div className="p-6 rounded-xl bg-gray-800">
-                            <Image width={256} height={256} src='/logo/Linux-Logo.wine.svg' className="text-center mx-auto" alt="" priority />
-                            <FormControl className="w-full" sx={{ marginBottom: '16px' }} variant="standard">
-                                <InputLabel error={error} htmlFor="input-username" sx={{ color: '#ffffff' }} >
-                                Tài khoản
-                                </InputLabel>
-                                <Input id="input-username" error={error} sx={{ color: '#ffffff' }} label="Tài khoản" size="small" variant="standard" className="w-full py-1 mb-2" />
-                                {error && <span className="text-red-700 text-xs">Tài khoản không tồn tại</span>}
-                            </FormControl>
-                            <FormControl className="w-full" sx={{ marginBottom: '24px' }} variant="standard">
-                                <InputLabel error={error} htmlFor="input-password" sx={{ color: '#ffffff' }}>
-                                    Mật khẩu
-                                </InputLabel>
-                                <Input error={error} id="input-password" type={showPassword ? 'text' : 'password'} size="small" variant="standard" label="Mật khẩu" className="w-full py-1 mb-2"  endAdornment={
-                                    <InputAdornment position="end">
-                                        <IconButton
-                                            aria-label={
-                                                showPassword ? 'hide the password' : 'display the password'
-                                            }
-                                            onClick={handleClickShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
-                                            onMouseUp={handleMouseUpPassword}
-                                            sx={{ color: '#ffffff' }}
-                                        >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                                        </IconButton>
-                                    </InputAdornment>
-                                } />
-                                {error && <span className="text-red-700 text-xs">Mật khẩu không đúng</span>}
-                            </FormControl>
-                            <Box component='div' className="flex justify-between">
-                                <Link href='/forgot-password' className="text-sky-500 hover:text-sky-600">Quên mật khẩu</Link>
-                                <Button variant="contained" className="float-end">
-                                    <Link href='/dashboard'>
-                                        Đăng nhập
-                                    </Link>
-                                </Button>
-                            </Box>
-                        </div>
-                    </form>
-                </Suspense>
+            <Box component='div' className="w-full h-screen flex justify-center items-center p-6">
+                <Login/>
             </Box>
         </>
     );
