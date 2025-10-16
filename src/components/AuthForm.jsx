@@ -15,6 +15,7 @@ const AuthForm = ({ mode, onSubmit, resetForm }) => {
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('');
 
     useEffect(() => {
         if (resetForm) {
@@ -35,33 +36,31 @@ const AuthForm = ({ mode, onSubmit, resetForm }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        onSubmit({ email, password })
         setLoading(true);
-        // setError("");
+        setError('');
 
-        
-        const formData = new FormData(event.currentTarget);
-        const data = {
-            username: formData.get('username'),
-            password: formData.get('password'),
+        const data = { // use email instead of username
+            username: email,
+            password: password,
             redirect: false,
             callbackUrl: '/'
         };
 
-        // console.log('>>> check form data:', data)
-
         try {
-            
+            onSubmit({ email, password }); // call onSubmit here before signin
             const result = await signIn("credentials", data)
             console.log('>>> check result', result)
-            
-            if (result.error === 'CredentialsSignin') {
-                console.log('Bị lỗi rồi!!!')
+
+            if (result?.error) {
+                setError('Invalid credentials. Please check your email and password.');
+            } else {
+                redirect('/dashboard')
             }
 
             redirect('/dashboard')
         } catch (error) {
             console.log('Có lỗi xảy ra:', error)
+            setError('An unexpected error occurred. Please try again.');
         }
     }
     return (
@@ -72,6 +71,10 @@ const AuthForm = ({ mode, onSubmit, resetForm }) => {
                     {/* {alert && (
                         <Alert severity={alert.type} className="mb-4">
                             {alert.message}
+                    <Image width={0} height={0} src='/logo/Linux-Logo.wine.svg' className="text-center mx-auto w-[256] h-auto" alt="logo" priority />
+                    {error && (
+                        <Alert severity="error" className="mb-4">
+                            {error}
                         </Alert>
                     )} */}
                     <FormControl className="w-full" sx={{ marginBottom: '16px' }} variant="standard">
@@ -112,7 +115,7 @@ const AuthForm = ({ mode, onSubmit, resetForm }) => {
                         </Button>
                     </Box>
                 </div>
-            </form>
+            </form >
         </>
     )
 }

@@ -42,6 +42,8 @@ export async function register() {
             createdAt: new Date(),
             updatedAt: new Date(),
             isActive: true,
+            twoFactorSecret: null, // Thêm trường cho 2FA
+            twoFactorEnabled: false, // Mặc định là tắt
             profile: {
                 firstName: 'System',
                 lastName: 'Administrator',
